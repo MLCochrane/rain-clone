@@ -1,0 +1,6 @@
+- src/ split into different folders
+- set up SCSS as you usually do
+- dist/ split into subfolders
+- modernizer
+  - what to include
+- what other meta tags are needed??

@@ -1,0 +1,31 @@
+{
+  "name": "learning-webpack",
+  "version": "1.0.0",
+  "description": "Learning the ropes of webpack.",
+  "main": "index.js",
+  "scripts": {
+    "develop": "webpack-dev-server --watch --config ./config/webpack.dev.js",
+    "build": "webpack --config ./config/webpack.prod.js"
+  },
+  "author": "Luke Cochrane",
+  "license": "ISC",
+  "devDependencies": {
+    "@babel/core": "^7.0.0-beta.49",
+    "@babel/preset-env": "^7.0.0-beta.49",
+    "babel-loader": "^8.0.0-beta.3",
+    "clean-webpack-plugin": "^0.1.19",
+    "css-loader": "^0.28.11",
+    "extract-text-webpack-plugin": "^4.0.0-beta.0",
+    "file-loader": "^1.1.11",
+    "html-webpack-plugin": "^3.2.0",
+    "lodash-es": "^4.17.10",
+    "modernizr-webpack-plugin": "^1.0.7",
+    "node-sass": "^4.9.0",
+    "sass-loader": "^7.0.1",
+    "style-loader": "^0.21.0",
+    "webpack": "^4.9.2",
+    "webpack-cli": "^2.1.4",
+    "webpack-dev-server": "^3.1.4",
+    "webpack-merge": "^4.1.2"
+  }
+}
