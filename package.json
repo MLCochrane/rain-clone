@@ -4,7 +4,7 @@
   "description": "Learning the ropes of webpack.",
   "main": "index.js",
   "scripts": {
-    "develop": "webpack-dev-server --watch --config ./config/webpack.dev.js",
+    "dev": "webpack-dev-server --watch --config ./config/webpack.dev.js",
     "build": "webpack --config ./config/webpack.prod.js"
   },
   "author": "Luke Cochrane",
@@ -27,5 +27,9 @@
     "webpack-cli": "^2.1.4",
     "webpack-dev-server": "^3.1.4",
     "webpack-merge": "^4.1.2"
+  },
+  "dependencies": {
+    "jquery": "^3.3.1",
+    "jquery-ui": "^1.12.1"
   }
 }

@@ -1,0 +1,34 @@
+.sidebar {
+  position: fixed;
+  left: 0;
+  top: 0;
+  height: 100vh;
+  width: 150px;
+  border: 1px solid rgba(0,0,0,0.1);
+  display: none;
+
+  &__nav {
+    position: absolute;
+    -webkit-transform: translateY(-50%);
+            transform: translateY(-50%);
+    top: 50%;
+  }
+  &__list {
+    &-item {
+      font-family: $mainFont;
+      font-size: $--step-up-1;
+      font-weight: 700;
+      text-transform: uppercase;
+      padding: .5em;
+      a {
+        text-decoration: none;
+        color: rgba(0,0,0,0.3);
+        -webkit-transition: color 200ms;
+        transition: color 200ms;
+        &:hover {
+          color: #000;
+        }
+      }
+    }
+  }
+}
