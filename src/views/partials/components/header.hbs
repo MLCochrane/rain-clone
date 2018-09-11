@@ -1,0 +1,31 @@
+{{#json
+'{
+  "links": [
+    {"title": "Home", "slug": "/"},
+    {"title": "Player", "slug": "/player"},
+    {"title": "Newpage", "slug": "/newpage"}
+  ]
+}'
+}}
+<header class="header">
+  <div class="brand">
+    <h1 class="brand__logo"><a href="/">Boilerplate</a></h1>
+  </div>
+  <div class="mobile-nav">
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 45 40">
+      <rect width="44" height="7" rx="3" ry="3" style="fill: #231f20"/>
+      <rect y="16" width="44" height="7" rx="3" ry="3" style="fill: #231f20"/>
+      <rect y="32" width="44" height="7" rx="3" ry="3" style="fill: #231f20"/>
+    </svg>
+  </div>
+  <div class="header__nav">
+    <ul class="header__list">
+      {{#each links}}
+      <li class="header__list-item">
+        <a href="{{this.slug}}">{{this.title}}</a>
+      </li>
+      {{/each}}
+    </ul>
+  </div>
+</header>
+{{/json}}

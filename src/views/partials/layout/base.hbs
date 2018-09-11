@@ -1,0 +1,46 @@
+{{!-- layouts/base.hbs --}}
+
+<!doctype html>
+<html>
+  <head>
+    <title>
+      {{#if title}}
+        {{title}}
+      {{else}}
+        Base Page Title
+      {{/if}}
+    </title>
+    {{#> head-block}}
+      {{!-- Page specific head content goes here. --}}
+    {{/head-block}}
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <link rel="stylesheet" href="https://use.typekit.net/kiu8cqw.css">
+  </head>
+  <body>
+    {{#> header }}
+      {{> components/header }}
+    {{/header}}
+
+      <div id="barba-wrapper">
+        <div class="barba-container" data-namespace={{namespace}}>
+          <div class="page-main">
+            {{#> body}}
+              {{!-- Body content goes here. --}}
+              {{/body}}
+          </div>
+        </div>
+      </div>
+
+
+    <footer>
+      {{#> footer-block}}
+        {{!--
+          The `includes/footer` partial is the default content,
+          but can be overridden.
+        --}}
+        {{> components/footer }}
+      {{/footer-block}}
+    </footer>
+  </body>
+</html>

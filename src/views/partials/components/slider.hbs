@@ -1,0 +1,25 @@
+{{#json
+'{
+  "slides": [
+    {
+      "title": "All in a day",
+      "slug": "/newpage",
+      "image": "./src/assets/120045.jpg"
+    },
+    {
+      "title": "Tuesday tunes",
+      "slug": "/player",
+      "image": "./src/assets/image2.jpg"
+    }
+  ]
+}'
+}}
+  <div class="slide-wrapper">
+    {{#each slides }}
+      <div class="slide" data-slide-index={{@index}}>
+        <a href="{{this.slug}}"><img src="{{this.image}}" alt=""></a>
+        <h2 class="title">{{this.title}}</h2>
+      </div>
+    {{/each}}
+  </div>
+{{/json}}
