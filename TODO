@@ -1,21 +1,9 @@
-- src/ split into different folders
-- set up SCSS as you usually do
-- dist/ split into subfolders
+
+/////////////////////
+/// *** TO DO *** ///
+/////////////////////
+
 - modernizer
   - what to include
 - what other meta tags are needed??
-/////////////
-/// TO DO ///
-/////////////
-/*
-Artist class
-- name
-- featured image
-- background image
-- info links
-- stream links
-- Biography
-- releases
-  - image, link, title, buy links, stream links
-- press
-*/
+- better image support (2x, minified, etc) DO RESEARCH
