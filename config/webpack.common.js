@@ -33,26 +33,46 @@ module.exports = {
       {
         test: /\.js$/,
         exclude: /(node_modules | bower_components)/,
-        use: {
-          loader: 'babel-loader',
-        }
+        loader: 'babel-loader'
       },
       {
-       test: /\.(png|svg|jpg|gif)$/,
-       use: [
-         {
-           loader: 'file-loader'
-         }
-       ]
+        test: /\.(png|svg|jpg|gif)$/,
+        loader: 'file-loader'
+      },
+      {
+        test: /\.(hbs|handlebars)/,
+        use: [
+          {
+            loader: 'handlebars-loader',
+            query: {
+              partialDirs: [path.join(__dirname, '../', 'src/views', 'partials')],
+              helperDirs: [path.join(__dirname, '../', 'src/views', 'helpers')]
+            }
+          }
+        ]
       }
     ]
   },
   plugins: [
-    new CleanWebpackPlugin(['dist/*.*'], {root: 'C:/Users/Luke Cochrane/Desktop/Projects/For testing/learning-webpack'}),
+    new CleanWebpackPlugin(['dist/*.*'], {root: path.join(__dirname, '../')}),
     new HtmlWebpackPlugin({
-     title: 'Learning Webpack',
-     inject: {},
-     template: "src/index.html"
+      inject: {},
+      template: "src/views/pages/index.hbs"
+    }),
+    new HtmlWebpackPlugin({
+      filename: 'player/index.html', // specify filename or else will overwrite default index.html
+      inject: {},
+      template: "src/views/pages/player.hbs"
+    }),
+    new HtmlWebpackPlugin({
+      filename: 'newpage/index.html', // specify filename or else will overwrite default index.html
+      inject: {},
+      template: "src/views/pages/newpage.hbs"
+    }),
+    new HtmlWebpackPlugin({
+      filename: 'anothernewpage/index.html', // specify filename or else will overwrite default index.html
+      inject: {},
+      template: "src/views/pages/anothernewpage.hbs"
     }),
     new ModernizerWebpackPlugin(modernizrConfig)
   ]
