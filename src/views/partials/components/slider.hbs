@@ -14,11 +14,18 @@
   ]
 }'
 }}
-  <div class="slide-wrapper">
+  <div class="slider-wrapper">
     {{#each slides }}
       <div class="slide" data-slide-index={{@index}}>
-        <a href="{{this.slug}}"><img src="{{this.image}}" alt=""></a>
-        <h2 class="title">{{this.title}}</h2>
+        <div class="slide__image">
+          <a href="{{this.slug}}"><img src="{{this.image}}" alt=""></a>
+        </div>
+        <div class="slide__content">
+          <h2 class="slide__title">{{this.title}}</h2>
+          <p class="slide__copy">
+            Lorem ipsum dolor sit amet, consectetur adipisicing elit. Unde facilis non numquam, maxime minima quas possimus ullam dolorem recusandae! Quo!
+          </p>
+        </div>
       </div>
     {{/each}}
   </div>

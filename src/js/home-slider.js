@@ -66,6 +66,8 @@ export default class Slider {
 
   goToNextSlide(slideOut, slideIn) {
     if (this.index != this.maxSlideCount) {
+      const outTitle = $(slideOut).find('.slide__content');
+
       let tl = new TimelineMax();
       this.index++;
 
@@ -74,8 +76,10 @@ export default class Slider {
       tl
         .set(slideIn, {autoAlpha: 1, className: '+=active'})
         .set(slideOut, {className: '-=active'})
-        .to(slideOut, 0.5, {y: '-100%', ease:Power3.easeInOut}, 0)
-        .to(slideIn, 0.7, {y: '-=100%', ease:Power3.easeInOut}, 0)
+        .to(outTitle, 0.7, {top: '0%', ease:Power3.easeInOut}, 0)
+        .to(slideOut, 0.7, {y: '-100%', ease:Power3.easeInOut}, 0)
+        .to(slideIn, 0.9, {y: '-=100%', ease:Power3.easeInOut}, 0)
+        .set(outTitle, {clearProps: 'all'})
         .call(this.resetScroll, [], this);
 
       // Checks to see if on last slide
@@ -87,6 +91,9 @@ export default class Slider {
 
   goToPrevSlide(slideOut, slideIn) {
     if(this.index != 1) {
+      const inTitle = $(slideIn).find('.slide__content');
+      const outTitle = $(slideOut).find('.slide__content');
+
       let tl = new TimelineMax();
       this.index--;
 
@@ -95,8 +102,12 @@ export default class Slider {
         tl
         .set(slideIn, {autoAlpha: 1, className: '+=active'})
         .set(slideOut, {className: '-=active'})
-        .to(slideOut, 0.5, {y: '0%', ease:Power3.easeInOut}, 0)
-        .to(slideIn, 0.7, {y: '+=100%', ease:Power3.easeInOut}, 0)
+        .set(inTitle, {top: '0%'})
+        .to(inTitle, 0.7, {top: "50%"}, 0)
+        .to(outTitle, 0.9, {top: '90%'}, 0)
+        .to(slideOut, 0.7, {y: '0%', ease:Power3.easeInOut}, 0)
+        .to(slideIn, 0.9, {y: '+=100%', ease:Power3.easeInOut}, 0)
+        .set(outTitle, {clearProps: 'all'})
         .call(this.resetScroll, [], this);
 
       // Checks to see if on last slide
