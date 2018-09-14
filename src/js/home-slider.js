@@ -14,6 +14,7 @@ export default class Slider {
 
     this.init();
     this.slideCounter();
+    this.bindEvents();
   }
 
   init() {
@@ -22,21 +23,44 @@ export default class Slider {
     this.resetScroll();
   }
 
-  slideCounter() {
-    var morphing = anime({
-      targets: '#morphing .polymorph',
-      d: [
-        { value: 'M26.594,16c0,5.851-4.743,10.594-10.594,10.594S5.406,21.851,5.406,16S10.149,3.813,16,3.813S26.594,10.149,26.594,16z' }
-      ],
-      elasticity: 500,
-      duration: 1000,
-      loop: false
+  bindEvents() {
+    let clicked = false;
+    $('.slider-nav').on('mousedown', e => {
+      e.stopPropagation();
+      clicked = true;
+      this.slideCounter(clicked);
     });
+    $(document).on('mouseup', e => {
+      e.stopPropagation();
+      clicked = false;
+      this.slideCounter(clicked);
+    });
+  }
 
-    $('#morphing').on('click', () => {
-      morphing.play();
-      morphing.reverse();
-    });
+  slideCounter(clicked) {
+    if (clicked) {
+      $('body').addClass('navigation-open');
+      $(document).on('mousemove', () => {
+         console.log('DRAGGIN!');
+      });
+    } else {
+      $('body').removeClass('navigation-open');
+      $(document).off('mousemove');
+    }
+    // var morphing = anime({
+    //   targets: '#morphing .polymorph',
+    //   d: [
+    //     { value: 'M26.594,16c0,5.851-4.743,10.594-10.594,10.594S5.406,21.851,5.406,16S10.149,3.813,16,3.813S26.594,10.149,26.594,16z' }
+    //   ],
+    //   elasticity: 500,
+    //   duration: 1000,
+    //   loop: false
+    // });
+    //
+    // $('#morphing').on('click', () => {
+    //   morphing.play();
+    //   morphing.reverse();
+    // });
   }
 
   destroy() {
@@ -46,6 +70,7 @@ export default class Slider {
   resetScroll() {
       //Called at end of slide animation so users can scroll again
       this.scrollLock = false;
+      this.setSlideNav();
   }
 
   scrollNav(e) {
@@ -136,5 +161,11 @@ export default class Slider {
       //   TweenMax.to(slideNavNext, 0.3, {autoAlpha: 1});
       // }
     }
+  }
+
+  setSlideNav() {
+    $('.slider-nav__single').removeClass('active');
+    const currentActive = $('.slide.active').attr('data-slide-index');
+    $(`[data-slide-nav=${currentActive}]`).addClass('active');
   }
 }

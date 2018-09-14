@@ -35,4 +35,9 @@
       </div>
     {{/each}}
   </div>
+  <div class="slider-nav">
+    {{#each slides}}
+    <div class="slider-nav__single" data-slide-nav={{@index}}></div>
+    {{/each}}
+  </div>
 {{/json}}

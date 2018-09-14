@@ -2,6 +2,9 @@ html {
   font-size: 62.5%;
   font-family: $mainFont;
 }
+body {
+  min-height: 100vh;
+}
 
 img {
   max-width: 100%;
