@@ -10,7 +10,7 @@ import {TweenMax, TimelineLite, Power2} from 'gsap';
 */
 import Player from './js/player.js';
 import Animate from './js/anime.js';
-import Slider from './js/home-slider.js';
+import Slider from './js/homepage/home-slider.js';
 
 
 $(document).ready(function() {
