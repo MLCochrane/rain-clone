@@ -69,6 +69,7 @@ export default class Slider {
    * @fires Slider#slideNavPrev [description]
    */
   scrollNav(e) {
+    console.log(e);
     // Checks to see if user can scroll...
     if (this.scrollLock == false) {
       let delta;
@@ -118,7 +119,7 @@ export default class Slider {
       .to(slideOut, 0.7, {y: '-100%', autoAlpha: 0, ease:Power3.easeInOut}, 0)
       .to(slideIn, 0.9, {y: '-=100%', ease:Power3.easeInOut}, 0)
       .set([outTitle, slideOut], {clearProps: 'all'})
-      .call(this.resetScroll, [], this);
+      .call(this.resetScroll, [], this, 2);
 
     // Checks to see if on last slide
     // if (this.index === this.maxSlideCount) {
@@ -144,7 +145,7 @@ export default class Slider {
       .to(slideOut, 0.7, {y: '+=100%', autoAlpha: 0, ease:Power3.easeInOut}, 0)
       .to(slideIn, 0.9, {y: '+=100%', ease:Power3.easeInOut}, 0)
       .set([outTitle, slideOut], {clearProps: 'all'})
-      .call(this.resetScroll, [], this);
+      .call(this.resetScroll, [], this, 2);
 
     // Checks to see if on last slide
     // if (this.index === 1) {
