@@ -28,7 +28,7 @@ export default function Drag(cb) {
     transitioning = true;
 
     tl
-    .to(dot, 0.5, {height: '50px', width: '50px'}, 0)
+    .to(dot, 0.5, {width: '50px'}, 0)
     .set(dragBar, {display: 'inherit'}, 0)
     .to(dragBar, 0.5, {opacity: '1'}, 0.25)
     .call(initVars, [evt, dot]);
@@ -55,7 +55,7 @@ export default function Drag(cb) {
     currentOver(dragBar[0].getBoundingClientRect());
 
     tl
-    .to(dot, 0.5, {height: '20px', width: '20px'}, 0)
+    .to(dot, 0.5, {width: '5px'}, 0)
     .to(dragBar, 0.2, {y: '0'}, 0)
     .to(dragBar, 0.5, {opacity: '0'}, 0.25)
     .set([dot, dragBar], {clearProps: 'all'}, 0.5)

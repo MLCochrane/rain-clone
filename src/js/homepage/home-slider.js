@@ -17,7 +17,7 @@ import Drag from './draggable.js';
 export default class Slider {
   constructor(slide) {
     this.slide = slide || 0;
-    this.index = 0;
+    this.index = 1;
     this.scrollLock = false;
     this.maxSlideCount = $('.slide').length;
     this.wrapper = $('.slider-wrapper');
@@ -51,6 +51,7 @@ export default class Slider {
     $(document).on('wheel', this.scrollNav);
     $(`[data-slide-index=${this.slide}]`).addClass('active').css('opacity', '1');
     this.resetScroll();
+    this.setSlideNav();
   }
 
   destroy() {
@@ -60,7 +61,6 @@ export default class Slider {
   resetScroll() {
       //Called at end of slide animation so users can scroll again
       this.scrollLock = false;
-      this.setSlideNav();
   }
   /**
    * [scrollNav description]
@@ -69,7 +69,6 @@ export default class Slider {
    * @fires Slider#slideNavPrev [description]
    */
   scrollNav(e) {
-    console.log(e);
     // Checks to see if user can scroll...
     if (this.scrollLock == false) {
       let delta;
@@ -80,6 +79,8 @@ export default class Slider {
       } else {
           delta = -1 *e.deltaY;
       };
+      console.log(delta);
+      console.log(this.index);
       // Checking to see if at either end of slideshow here once scroll direction determined
       if (delta < 0 && this.index != this.maxSlideCount){
           this.slideNavNext();
@@ -107,17 +108,20 @@ export default class Slider {
 
   goToNextSlide(slideOut, slideIn) {
     const outTitle = $(slideOut).find('.slide__content');
+    const inDetails = $(slideIn).find('.slide__copy');
 
     let tl = new TimelineMax();
     this.index = parseInt(slideIn.attr('data-slide-index')) + 1;
       // timeline
       // changing y and x here will simply convert this to horizontal scroll
     tl
-      .set(slideIn, {y: '100%', autoAlpha: 1, className: '+=active'})
+      .call(this.setSlideNav, [], 0)
+      .set(slideIn, {y: '100%', className: '+=active'})
       .set(slideOut, {className: '-=active', autoAlpha: 1})
-      .to(outTitle, 0.7, {top: '0%', ease:Power3.easeInOut}, 0)
-      .to(slideOut, 0.7, {y: '-100%', autoAlpha: 0, ease:Power3.easeInOut}, 0)
-      .to(slideIn, 0.9, {y: '-=100%', ease:Power3.easeInOut}, 0)
+      .to(outTitle, 1.2, {top: '0%', ease:Power3.easeInOut}, 0)
+      .to(slideOut, 1.2, {y: '-100%', autoAlpha: 0, ease:Power3.easeInOut}, 0)
+      .to(slideIn, 1.5, {y: '-=100%', autoAlpha: 1, ease:Power3.easeInOut}, 0)
+      .to(inDetails, 1, {autoAlpha: 1}, 1)
       .set([outTitle, slideOut], {clearProps: 'all'})
       .call(this.resetScroll, [], this, 2);
 
@@ -137,13 +141,14 @@ export default class Slider {
       // timeline
       // changing y and x here will simply convert this to horizontal scroll
       tl
-      .set(slideIn, {y: '-100%', autoAlpha: 1, className: '+=active'})
+      .call(this.setSlideNav, [], 0)
+      .set(slideIn, {y: '-100%', className: '+=active'})
       .set(slideOut, {className: '-=active'})
       .set(inTitle, {top: '0%'})
-      .to(inTitle, 0.7, {top: "50%"}, 0)
-      .to(outTitle, 0.9, {top: '90%'}, 0)
-      .to(slideOut, 0.7, {y: '+=100%', autoAlpha: 0, ease:Power3.easeInOut}, 0)
-      .to(slideIn, 0.9, {y: '+=100%', ease:Power3.easeInOut}, 0)
+      .to(inTitle, 1.2, {top: "50%"}, 0)
+      .to(outTitle, 1.2, {top: '70%'}, 0)
+      .to(slideOut, 1.2, {y: '+=100%', autoAlpha: 0, ease:Power3.easeInOut}, 0)
+      .to(slideIn, 1.5, {y: '+=100%', autoAlpha: 1, ease:Power3.easeInOut}, 0)
       .set([outTitle, slideOut], {clearProps: 'all'})
       .call(this.resetScroll, [], this, 2);
 

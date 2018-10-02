@@ -10,14 +10,20 @@
 
   .brand {
     &__logo {
-      line-height: 100px;
       font-size: 25px;
       font-weight: 700;
       text-transform: uppercase;
       margin-left: 1em;
+      svg {
+        height: 100px;
+        width: 50px;
+      }
     }
   }
   .mobile-nav {
+    display: none;
+
+
     cursor: pointer;
     position: absolute;
     transform: translate(-50%,-50%);
