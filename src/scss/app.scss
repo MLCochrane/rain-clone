@@ -1,5 +1,9 @@
+// BASE
 @import "base/_reset";
 @import "base/_variables";
 @import "base/_base";
+@import "base/_mixins";
+
+// MODULES
 @import "modules/_header";
 @import "modules/_page-main";

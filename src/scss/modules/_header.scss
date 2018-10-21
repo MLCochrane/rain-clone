@@ -9,6 +9,11 @@
   z-index: 99;
 
   .brand {
+    display: inline-block;
+    vertical-align: middle;
+    @include media-query(700px) {
+      display: block;
+    }
     &__logo {
       font-size: 25px;
       font-weight: 700;
@@ -22,8 +27,6 @@
   }
   .mobile-nav {
     display: none;
-
-
     cursor: pointer;
     position: absolute;
     transform: translate(-50%,-50%);
@@ -35,10 +38,14 @@
   }
 
   &__nav {
-    position: absolute;
-    transform: translate(-50%, -50%);
-    top: 50%;
-    left: 50%;
+    display: inline-block;
+    vertical-align: middle;
+    @include media-query(700px) {
+      position: absolute;
+      transform: translate(-50%, -50%);
+      top: 50%;
+      left: 50%;
+    }
   }
   &__list {
     &-item {
