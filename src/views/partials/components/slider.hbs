@@ -10,16 +10,35 @@
       "title": "Tuesday tunes",
       "slug": "/player",
       "image": "./src/assets/image2.jpg"
+    },
+    {
+      "title": "Hippy tunes",
+      "slug": "/player",
+      "image": "./src/assets/slide-1.jpg"
     }
   ]
 }'
 }}
-  <div class="slide-wrapper">
+  <div class="slider-wrapper">
     {{#each slides }}
       <div class="slide" data-slide-index={{@index}}>
-        <a href="{{this.slug}}"><img src="{{this.image}}" alt=""></a>
-        <h2 class="title">{{this.title}}</h2>
+        <div class="slide__image">
+          <a href="{{this.slug}}"><img src="{{this.image}}" alt=""></a>
+        </div>
+        <div class="slide__content">
+          <h2 class="slide__title">{{this.title}}</h2>
+          <p class="slide__copy">
+            Lorem ipsum dolor sit amet, consectetur adipisicing elit.
+          </p>
+        </div>
       </div>
     {{/each}}
+  </div>
+  <div class="slider-nav">
+    <div class="draggeable-standin"></div>
+    {{#each slides}}
+    <div class="slider-nav__single" data-slide-nav={{@index}}></div>
+    {{/each}}
+    <div class="drag-bar"></div>
   </div>
 {{/json}}

@@ -5,30 +5,89 @@
   font-size: 70px;
   padding: 1em;
   overflow: hidden;
+  .slider-wrapper {
+    position: relative;
+    height: 100%;
+    width: 100%;
+  }
 
   .slide {
-    position: relative;
-    height: 100vh;
-  }
-
-  .title {
     position: absolute;
-    transform: translateY(-50%);
-    top: 75%;
-    left: 10%;
-    font-family: $secondaryFont;
-    font-weight: 900;
-    font-size: $--step-up-3;
-    text-transform: capitalize;
+    height: 100%;
+    width: 100%;
+    opacity: 0;
+    &__image {
+      position: absolute;
+      transform: translate(-50%,-50%);
+      top: 50%;
+      left: 60%;
+      user-select: none;
+    }
+    &__content {
+      position: absolute;
+      transform: translateY(-50%);
+      top: 50%;
+      left: 10%;
+      font-size: $--step-down-3;
+      max-width: 450px
+    }
+    &__title {
+      position: relative;
+      font-family: $secondaryFont;
+      font-weight: 900;
+      font-size: $--step-up-3;
+      text-transform: capitalize;
+      margin-bottom: .25em;
+    }
+    &__copy {
+      font-size: 16px;
+      opacity: 0;
+    }
   }
-
-  a {
+  .slider-nav {
     position: absolute;
     transform: translate(-50%,-50%);
     top: 50%;
-    left: 60%;
-    img {
-      height: 700px;
+    right: 5%;
+    cursor: grab;
+    user-select: none;
+    &__single {
+      position: relative;
+      width: 3px;
+      height: 30px;
+      background: #f1f1f1;
+      transition: height 200ms, width 200ms;
+      pointer-events: none;
+      padding-bottom: 5px;
+      &.active {
+        background: black;
+      }
+      &.draggable-source--is-dragging {
+        background: blue;
+        display: inherit;
+      }
     }
   }
+  .draggeable-standin {
+    position: absolute;
+    transform: translate(-50%,-50%);
+    top: 50%;
+    left: 50%;
+    width: 50px;
+    height: 100%;
+    user-select: none;
+  }
+  .drag-bar {
+    position: absolute;
+    top: 50%;
+    width: 70px;
+    height: 2px;
+    background-color: green;
+    opacity: 0;
+    display: none;
+    transform: translate3d(0%,-50%,0);
+  }
+}
+.navigation-open {
+  cursor: grabbing;
 }
