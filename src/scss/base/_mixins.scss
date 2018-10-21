@@ -1,0 +1,5 @@
+@mixin media-query($view) {
+  @media only screen and (min-width: #{$view}){
+    @content;
+  }
+}

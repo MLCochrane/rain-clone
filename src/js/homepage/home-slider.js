@@ -79,8 +79,6 @@ export default class Slider {
       } else {
           delta = -1 *e.deltaY;
       };
-      console.log(delta);
-      console.log(this.index);
       // Checking to see if at either end of slideshow here once scroll direction determined
       if (delta < 0 && this.index != this.maxSlideCount){
           this.slideNavNext();
@@ -118,11 +116,12 @@ export default class Slider {
       .call(this.setSlideNav, [], 0)
       .set(slideIn, {y: '100%', className: '+=active'})
       .set(slideOut, {className: '-=active', autoAlpha: 1})
+      .set(inDetails, {autoAlpha: 0})
       .to(outTitle, 1.2, {top: '0%', ease:Power3.easeInOut}, 0)
       .to(slideOut, 1.2, {y: '-100%', autoAlpha: 0, ease:Power3.easeInOut}, 0)
       .to(slideIn, 1.5, {y: '-=100%', autoAlpha: 1, ease:Power3.easeInOut}, 0)
-      .to(inDetails, 1, {autoAlpha: 1}, 1)
-      .set([outTitle, slideOut], {clearProps: 'all'})
+      .to(inDetails, 1, {autoAlpha: 1}, 1.2)
+      .set([outTitle, slideOut, inDetails], {clearProps: 'all'})
       .call(this.resetScroll, [], this, 2);
 
     // Checks to see if on last slide
@@ -134,6 +133,7 @@ export default class Slider {
   goToPrevSlide(slideOut, slideIn) {
     const inTitle = $(slideIn).find('.slide__content');
     const outTitle = $(slideOut).find('.slide__content');
+    const inDetails = $(slideIn).find('.slide__copy');
 
     let tl = new TimelineMax();
     this.index = parseInt(slideIn.attr('data-slide-index')) + 1;
@@ -145,11 +145,13 @@ export default class Slider {
       .set(slideIn, {y: '-100%', className: '+=active'})
       .set(slideOut, {className: '-=active'})
       .set(inTitle, {top: '0%'})
+      .set(inDetails, {autoAlpha: 0})
       .to(inTitle, 1.2, {top: "50%"}, 0)
       .to(outTitle, 1.2, {top: '70%'}, 0)
       .to(slideOut, 1.2, {y: '+=100%', autoAlpha: 0, ease:Power3.easeInOut}, 0)
       .to(slideIn, 1.5, {y: '+=100%', autoAlpha: 1, ease:Power3.easeInOut}, 0)
-      .set([outTitle, slideOut], {clearProps: 'all'})
+      .to(inDetails, 1, {autoAlpha: 1}, 1.2)
+      .set([outTitle, slideOut, inDetails], {clearProps: 'all'})
       .call(this.resetScroll, [], this, 2);
 
     // Checks to see if on last slide
