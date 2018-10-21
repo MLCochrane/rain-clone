@@ -1,4 +1,4 @@
-#Frontend Boiler
+# Frontend Boiler
 
 Simple boilerplate for frontend projects allowing you to get up and running quick! Using handlebars, SCSS, an OOP javascript structure and webpack this lets you focus on creating and not worrying about setting up your environment.
 
