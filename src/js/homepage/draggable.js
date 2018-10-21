@@ -14,10 +14,8 @@ export default function Drag(cb) {
 
   let transitioning = false;
 
-  // Array of getBoundingClientRect for each slide nav area
   let zones = [];
 
-  // similar to mouseDown
   draggable.on('drag:start', evt => {
     initialMousePosition = {
       x: evt.sensorEvent.clientX,
@@ -29,9 +27,8 @@ export default function Drag(cb) {
     const tl = new TimelineLite;
     transitioning = true;
 
-    // opening transtition and calls function to set all dimensions
     tl
-    .to(dot, 0.5, {className: '+=opened'}, 0)
+    .to(dot, 0.5, {width: '50px'}, 0)
     .set(dragBar, {display: 'inherit'}, 0)
     .to(dragBar, 0.5, {opacity: '1'}, 0.25)
     .call(initVars, [evt, dot]);
@@ -58,7 +55,7 @@ export default function Drag(cb) {
     currentOver(dragBar[0].getBoundingClientRect());
 
     tl
-    .to(dot, 0.5, {className: '-=opened'}, 0)
+    .to(dot, 0.5, {width: '5px'}, 0)
     .to(dragBar, 0.2, {y: '0'}, 0)
     .to(dragBar, 0.5, {opacity: '0'}, 0.25)
     .set([dot, dragBar], {clearProps: 'all'}, 0.5)

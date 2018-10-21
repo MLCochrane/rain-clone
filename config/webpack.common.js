@@ -26,8 +26,7 @@ module.exports = {
   },
   output: {
     filename: '[name].bundle.js',
-    path: path.resolve(__dirname, '../dist'),
-    publicPath: ''
+    path: path.resolve(__dirname, '../dist')
   },
   module: {
     rules: [
@@ -38,15 +37,7 @@ module.exports = {
       },
       {
         test: /\.(png|svg|jpg|gif)$/,
-        use: [
-          'file-loader',
-          {
-            loader: 'image-webpack-loader',
-            options: {
-              disable: true
-            }
-          }
-        ] 
+        loader: 'file-loader'
       },
       {
         test: /\.(hbs|handlebars)/,
