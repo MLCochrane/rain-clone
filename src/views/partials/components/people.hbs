@@ -1,0 +1,71 @@
+{{#json
+'{
+	"slides": [
+		{
+			"title": "Eileen",
+			"date": "2016",
+			"slug": "/newpage",
+			"image": "./src/assets/slide1.jpg"
+		},
+		{
+			"title": "Alta Vista",
+			"date": "2018",
+			"slug": "/player",
+			"image": "./src/assets/120048.jpg"
+		},
+		{
+			"title": "Westboro",
+			"date": "2017",
+			"slug": "/player",
+			"image": "./src/assets/24780015.jpg"
+		},
+		{
+			"title": "Title here",
+			"date": "2016",
+			"slug": "/player",
+			"image": "./src/assets/img059.jpg"
+		},
+		{
+			"title": "Sunset at home",
+			"date": "2016",
+			"slug": "/player",
+			"image": "./src/assets/RiverReading.jpg"
+		},
+		{
+			"title": "Andrew",
+			"date": "2015",
+			"slug": "/player",
+			"image": "./src/assets/120051.jpg"
+		}
+	]
+}'
+}}
+<section class="slider">
+	<div class="slider-wrapper">
+		{{#each slides }}
+			<div class="slide" data-slide-index={{@index}}>
+				<div class="slide__image">
+					<a href="{{this.slug}}"><img src="{{this.image}}" alt=""></a>
+				</div>
+				<div class="slide__content">
+					<h2 class="slide__title">{{this.title}}</h2>
+					<p class="slide__copy">
+						{{this.title}} <br /> {{this.date}}
+					</p>
+				</div>
+			</div>
+		{{/each}}
+	</div>
+	<div class="slider-nav">
+		{{!-- <div class="draggeable-standin"></div>
+		{{#each slides}}
+		<div class="slider-nav__single" data-slide-nav={{@index}}></div>
+		{{/each}}
+		<div class="drag-bar"></div> --}}
+		{{#each slides}}
+			<div class="slider-nav__thumbnail" style="background-image: url({{this.image}});" data-slide-nav={{@index}}>
+			</div>
+		{{/each}}
+	</div>
+</section>
+{{/json}}

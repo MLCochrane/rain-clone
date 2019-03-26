@@ -1,13 +1,7 @@
 import $ from 'jquery';
 import { TweenMax, TimelineLite, Power3 } from 'gsap';
-import anime from 'animejs';
 
 import Drag from './draggable.js';
-
-
-/**
- * @typedef {object} WheelEvent
- */
 
 /**
  * Slider class
@@ -20,10 +14,17 @@ export default class Slider {
     this.index = 1;
     this.scrollLock = false;
     this.maxSlideCount = $('.slide').length;
-    this.wrapper = $('.slider-wrapper');
+
+    this.selectors = {
+      $sliderNav: $('.slider-nav'),
+      $sliderThumbnail: $('.slider-nav__thumbnail')
+    }
 
     this.scrollNav = this.scrollNav.bind(this);
     this.setDragItem = this.setDragItem.bind(this);
+    this.bindEvents = this.bindEvents.bind(this);
+    this.setSlideNav = this.setSlideNav.bind(this);
+    this.destroy = this.destroy.bind(this);
     // this.calcDims = this.calcDims.bind(this);
 
     this.init();
@@ -52,10 +53,42 @@ export default class Slider {
     $(`[data-slide-index=${this.slide}]`).addClass('active').css('opacity', '1');
     this.resetScroll();
     this.setSlideNav();
+    this.bindEvents();
   }
 
   destroy() {
+    console.log('I am unbinding');
     $(document).off('wheel', this.scrollNav);
+    $(document).off('keydown', '**');
+    this.selectors.$sliderThumbnail.off('click', '**');
+  }
+
+  bindEvents() {
+    console.log('I am binding');
+    $(document).on('keydown', e => {
+      console.log('I am being pressed');
+      console.log(this.scrollLock);
+      switch(e.keyCode) {
+        case 39:
+          if (this.index != this.maxSlideCount && this.scrollLock === false) {
+            this.slideNavNext();
+            this.scrollLock = true;
+          }
+          break;
+        case 37: 
+          if (this.index != 1 && this.scrollLock === false) {
+            this.slideNavPrev();
+            this.scrollLock = true;
+          }
+          break;
+        case 13: 
+          console.log('Enter');
+          break;
+      }
+    });
+    this.selectors.$sliderThumbnail.on('click', e => {
+      this.setDragItem(e.target);
+    });
   }
 
   resetScroll() {
@@ -114,12 +147,12 @@ export default class Slider {
       // changing y and x here will simply convert this to horizontal scroll
     tl
       .call(this.setSlideNav, [], 0)
-      .set(slideIn, {y: '100%', className: '+=active'})
+      .set(slideIn, {x: '20%', className: '+=active'})
       .set(slideOut, {className: '-=active', autoAlpha: 1})
       .set(inDetails, {autoAlpha: 0})
       .to(outTitle, 1.2, {top: '0%', ease:Power3.easeInOut}, 0)
-      .to(slideOut, 1.2, {y: '-100%', autoAlpha: 0, ease:Power3.easeInOut}, 0)
-      .to(slideIn, 1.5, {y: '-=100%', autoAlpha: 1, ease:Power3.easeInOut}, 0)
+      .to(slideOut, 1.2, {x: '-20%', autoAlpha: 0, ease:Power3.easeInOut}, 0)
+      .to(slideIn, 1.5, {x: '-=20%', autoAlpha: 1, ease:Power3.easeInOut}, 0)
       .to(inDetails, 1, {autoAlpha: 1}, 1.2)
       .set([outTitle, slideOut, inDetails], {clearProps: 'all'})
       .call(this.resetScroll, [], this, 2);
@@ -142,14 +175,14 @@ export default class Slider {
       // changing y and x here will simply convert this to horizontal scroll
       tl
       .call(this.setSlideNav, [], 0)
-      .set(slideIn, {y: '-100%', className: '+=active'})
+      .set(slideIn, {x: '-20%', className: '+=active'})
       .set(slideOut, {className: '-=active'})
       .set(inTitle, {top: '0%'})
       .set(inDetails, {autoAlpha: 0})
       .to(inTitle, 1.2, {top: "50%"}, 0)
       .to(outTitle, 1.2, {top: '70%'}, 0)
-      .to(slideOut, 1.2, {y: '+=100%', autoAlpha: 0, ease:Power3.easeInOut}, 0)
-      .to(slideIn, 1.5, {y: '+=100%', autoAlpha: 1, ease:Power3.easeInOut}, 0)
+      .to(slideOut, 1.2, {x: '+=20%', autoAlpha: 0, ease:Power3.easeInOut}, 0)
+      .to(slideIn, 1.5, {x: '+=20%', autoAlpha: 1, ease:Power3.easeInOut}, 0)
       .to(inDetails, 1, {autoAlpha: 1}, 1.2)
       .set([outTitle, slideOut, inDetails], {clearProps: 'all'})
       .call(this.resetScroll, [], this, 2);
@@ -164,6 +197,7 @@ export default class Slider {
   setSlideNav() {
     $('.slider-nav__single').removeClass('active');
     const currentActive = $('.slide.active').attr('data-slide-index');
-    $(`[data-slide-nav=${currentActive}]`).addClass('active');
+    this.selectors.$sliderNav.find('.active').removeClass('active');
+    this.selectors.$sliderNav.find(`[data-slide-nav=${currentActive}]`).addClass('active');
   }
 }

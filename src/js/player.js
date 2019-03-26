@@ -1,7 +1,5 @@
 import '../scss/app.scss';
 import $ from 'jquery';
-// import 'jquery-ui/ui/widget';
-// import 'jquery-ui/ui/widgets/draggable';
 
 export default class Player {
   constructor(url) {

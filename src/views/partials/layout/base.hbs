@@ -22,13 +22,13 @@
       {{> components/header }}
     {{/header}}
 
-      <div id="barba-wrapper">
-        <div class="barba-container" data-namespace={{namespace}}>
-          <div class="page-main">
+      <div data-barba="wrapper">
+        <div data-barba="container" data-barba-namespace={{namespace}}>
+          <main class="page-main">
             {{#> body}}
               {{!-- Body content goes here. --}}
               {{/body}}
-          </div>
+          </main>
         </div>
       </div>
 

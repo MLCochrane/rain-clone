@@ -69,9 +69,9 @@ module.exports = {
       template: "src/views/pages/index.hbs"
     }),
     new HtmlWebpackPlugin({
-      filename: 'player/index.html', // specify filename or else will overwrite default index.html
+      filename: 'people/index.html', // specify filename or else will overwrite default index.html
       inject: {},
-      template: "src/views/pages/player.hbs"
+      template: "src/views/pages/people.hbs"
     }),
     new HtmlWebpackPlugin({
       filename: 'newpage/index.html', // specify filename or else will overwrite default index.html
