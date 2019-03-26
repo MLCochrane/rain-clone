@@ -6,7 +6,6 @@ import {TweenMax, TimelineLite, Power2} from 'gsap';
 /*
 * TEMPLATES
 */
-import Player from './js/player.js';
 import Slider from './js/homepage/home-slider.js';
 
 
@@ -16,38 +15,35 @@ barba.init({
 	transitions: [
 		{
 			appear: data => {
+				// Initial load
+				let tl = new TimelineLite();
+				let body = document.getElementsByTagName('body');
+				tl
+				.to(body, 1, {autoAlpha: 1}, 0);
+
 				if (data.current.namespace === 'contact') {
 					return;
 				}
 				slider = new Slider();
-				console.log('Appear is called');
 			},
 			enter: data => {
-				console.log('huh?');
+				console.log(data);
 				if (data.current.namespace === 'contact') {
 					return;
 				}
+				let tl = new TimelineLite();
+				let curContainer = data.current.container;
+				let nextContianer = data.next.container;
+
+				tl
+				.to(curContainer, 1, {autoAlpha: 0, y: 100}, 0)
+				.from(nextContianer, 1, {autoAlpha: 0, y: 100}, 0);
+
 				slider = new Slider();
 			},
 			leave: data => {
-				console.log('Leave is called');
 				slider.destroy();
 			}
 		}
-	],
-	views: [{
-		namespace: 'home',
-		beforeAppear(data) {
-		  // do something before leaving the current `index` namespace
-		},
-		afterLeave() {
-			// slider.destroy();
-		}
-	  }, {
-		namespace: 'people',
-		beforeAppear(data) {
-			// console.log(data);
-		  // do something before entering the `contact` namespace
-		}
-	  }]
+	]
 });

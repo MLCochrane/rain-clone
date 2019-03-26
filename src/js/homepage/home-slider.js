@@ -24,8 +24,9 @@ export default class Slider {
     this.setDragItem = this.setDragItem.bind(this);
     this.bindEvents = this.bindEvents.bind(this);
     this.setSlideNav = this.setSlideNav.bind(this);
+    this.handleKeypress = this.handleKeypress.bind(this);
+    this.handleThumbnails = this.handleThumbnails.bind(this);
     this.destroy = this.destroy.bind(this);
-    // this.calcDims = this.calcDims.bind(this);
 
     this.init();
     Drag(this.setDragItem);
@@ -49,51 +50,52 @@ export default class Slider {
   }
 
   init() {
-    $(document).on('wheel', this.scrollNav);
-    $(`[data-slide-index=${this.slide}]`).addClass('active').css('opacity', '1');
+    $(`[data-slide-index=${this.slide}]`).addClass('active').css('opacity', '1').attr('aria-hidden', false);
     this.resetScroll();
     this.setSlideNav();
     this.bindEvents();
   }
 
+  
+  resetScroll() {
+    //Called at end of slide animation so users can scroll again
+    this.scrollLock = false;
+}
+ 
+  bindEvents() {
+    $(document).on('wheel', this.scrollNav);
+    $(document).on('keydown', this.handleKeypress);
+    this.selectors.$sliderThumbnail.on('click', this.handleThumbnails);
+  }
+
   destroy() {
-    console.log('I am unbinding');
     $(document).off('wheel', this.scrollNav);
-    $(document).off('keydown', '**');
+    $(document).off('keydown', this.handleKeypress);
     this.selectors.$sliderThumbnail.off('click', '**');
   }
 
-  bindEvents() {
-    console.log('I am binding');
-    $(document).on('keydown', e => {
-      console.log('I am being pressed');
-      console.log(this.scrollLock);
-      switch(e.keyCode) {
-        case 39:
-          if (this.index != this.maxSlideCount && this.scrollLock === false) {
-            this.slideNavNext();
-            this.scrollLock = true;
-          }
-          break;
-        case 37: 
-          if (this.index != 1 && this.scrollLock === false) {
-            this.slideNavPrev();
-            this.scrollLock = true;
-          }
-          break;
-        case 13: 
-          console.log('Enter');
-          break;
-      }
-    });
-    this.selectors.$sliderThumbnail.on('click', e => {
-      this.setDragItem(e.target);
-    });
+  handleKeypress(e) {
+    switch(e.keyCode) {
+      case 39:
+        if (this.index != this.maxSlideCount && this.scrollLock === false) {
+          this.slideNavNext();
+          this.scrollLock = true;
+        }
+        break;
+      case 37: 
+        if (this.index != 1 && this.scrollLock === false) {
+          this.slideNavPrev();
+          this.scrollLock = true;
+        }
+        break;
+      case 13: 
+        console.log('Enter');
+        break;
+    }
   }
 
-  resetScroll() {
-      //Called at end of slide animation so users can scroll again
-      this.scrollLock = false;
+  handleThumbnails(e) {
+    this.setDragItem(e.target);
   }
   /**
    * [scrollNav description]
@@ -147,8 +149,8 @@ export default class Slider {
       // changing y and x here will simply convert this to horizontal scroll
     tl
       .call(this.setSlideNav, [], 0)
-      .set(slideIn, {x: '20%', className: '+=active'})
-      .set(slideOut, {className: '-=active', autoAlpha: 1})
+      .set(slideIn, {x: '20%', className: '+=active', attr: {'aria-hidden': false}})
+      .set(slideOut, {className: '-=active', autoAlpha: 1, attr: {'aria-hidden': true}})
       .set(inDetails, {autoAlpha: 0})
       .to(outTitle, 1.2, {top: '0%', ease:Power3.easeInOut}, 0)
       .to(slideOut, 1.2, {x: '-20%', autoAlpha: 0, ease:Power3.easeInOut}, 0)
@@ -175,8 +177,8 @@ export default class Slider {
       // changing y and x here will simply convert this to horizontal scroll
       tl
       .call(this.setSlideNav, [], 0)
-      .set(slideIn, {x: '-20%', className: '+=active'})
-      .set(slideOut, {className: '-=active'})
+      .set(slideIn, {x: '-20%', className: '+=active', attr: {'aria-hidden': false}})
+      .set(slideOut, {className: '-=active', attr: {'aria-hidden': true}})
       .set(inTitle, {top: '0%'})
       .set(inDetails, {autoAlpha: 0})
       .to(inTitle, 1.2, {top: "50%"}, 0)
@@ -195,7 +197,7 @@ export default class Slider {
   }
 
   setSlideNav() {
-    $('.slider-nav__single').removeClass('active');
+    // $('.slider-nav__single').removeClass('active');
     const currentActive = $('.slide.active').attr('data-slide-index');
     this.selectors.$sliderNav.find('.active').removeClass('active');
     this.selectors.$sliderNav.find(`[data-slide-nav=${currentActive}]`).addClass('active');
