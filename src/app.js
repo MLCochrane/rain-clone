@@ -1,49 +1,55 @@
 import './scss/app.scss';
 import barba from '@barba/core';
-import {TweenMax, TimelineLite, Power2} from 'gsap';
+import {TweenMax, TimelineLite} from 'gsap';
 
-
-/*
-* TEMPLATES
-*/
 import Slider from './js/homepage/home-slider.js';
-
+import header from './js/header.js';
 
 let slider;
 
 barba.init({
 	transitions: [
 		{
+			sync: true,
 			appear: data => {
 				// Initial load
-				let tl = new TimelineLite();
-				let body = document.getElementsByTagName('body');
-				tl
-				.to(body, 1, {autoAlpha: 1}, 0);
+				header();
 
 				if (data.current.namespace === 'contact') {
 					return;
 				}
-				slider = new Slider();
+				slider = new Slider(data.current.namespace);
 			},
 			enter: data => {
-				console.log(data);
 				if (data.current.namespace === 'contact') {
 					return;
 				}
-				let tl = new TimelineLite();
-				let curContainer = data.current.container;
-				let nextContianer = data.next.container;
-
-				tl
-				.to(curContainer, 1, {autoAlpha: 0, y: 100}, 0)
-				.from(nextContianer, 1, {autoAlpha: 0, y: 100}, 0);
-
-				slider = new Slider();
+				slider = new Slider(data.next.namespace);
 			},
-			leave: data => {
+			leave: async ({ current, next }) => {
+				// Close drawer if open
+				document.getElementById('MobileNav').classList.remove('active');
+
 				slider.destroy();
+				await pageTransiton(current.container, next.container);
+
+				// Removed after transition done allowing slider events to fire again
+				document.body.classList.replace('is-animating', 'not-animating');
 			}
 		}
 	]
 });
+
+function pageTransiton(cur, next) {
+	return new Promise(resolve => {
+		// Used to ensure slider events not called between pages when the current Slider class is changing
+		document.body.classList.replace('not-animating', 'is-animating');
+
+		// Animation handles both current and next pages
+		let tl = new TimelineLite();
+		tl
+		.set(next, {autoAlpha: 0, y: -5}, 0)
+		.to(cur, 1, {autoAlpha: 0, y: -5}, 0)
+		.to(next, 2, { autoAlpha: 1, y: 0, onComplete: () => { resolve(); }}, 1);
+	});
+}
