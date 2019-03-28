@@ -1,23 +1,24 @@
 import $ from 'jquery';
 import { TweenMax, TimelineLite, Power3 } from 'gsap';
 
-import Drag from './draggable.js';
-
 /**
  * Slider class
  * @param {number} slide optional index of starting slide
  * @constructor
  */
 export default class Slider {
-  constructor(slide) {
+  constructor(namespace, slide) {
+    this.namespace = namespace;
     this.slide = slide || 0;
     this.index = 1;
     this.scrollLock = false;
-    this.maxSlideCount = $('.slide').length;
+    this.maxSlideCount = $(`#${this.namespace}`).find('.slide').length;
 
     this.selectors = {
-      $sliderNav: $('.slider-nav'),
-      $sliderThumbnail: $('.slider-nav__thumbnail')
+      $sliderNav: $(`#${this.namespace}`).find('.slider-nav'),
+      $sliderThumbnail: $(`#${this.namespace}`).find('.slider-nav__thumbnail'),
+      $mobileNavIndex: $(`#${this.namespace}`).find('[data-slider-nav="current"]'),
+      $mobileNavButtons: $(`#${this.namespace}`).find('.slider-nav__button')
     }
 
     this.scrollNav = this.scrollNav.bind(this);
@@ -26,10 +27,10 @@ export default class Slider {
     this.setSlideNav = this.setSlideNav.bind(this);
     this.handleKeypress = this.handleKeypress.bind(this);
     this.handleThumbnails = this.handleThumbnails.bind(this);
+    this.handleButtons = this.handleButtons.bind(this);
     this.destroy = this.destroy.bind(this);
 
     this.init();
-    Drag(this.setDragItem);
   }
 
   setDragItem(result) {
@@ -50,12 +51,11 @@ export default class Slider {
   }
 
   init() {
-    $(`[data-slide-index=${this.slide}]`).addClass('active').css('opacity', '1').attr('aria-hidden', false);
+    $(`#${this.namespace}`).find(`[data-slide-index=${this.slide}]`).addClass('active').css('opacity', '1').attr('aria-hidden', false);
     this.resetScroll();
-    this.setSlideNav();
     this.bindEvents();
+    this.setSlideNav();
   }
-
   
   resetScroll() {
     //Called at end of slide animation so users can scroll again
@@ -64,38 +64,64 @@ export default class Slider {
  
   bindEvents() {
     $(document).on('wheel', this.scrollNav);
-    $(document).on('keydown', this.handleKeypress);
+		$(document).on('keydown', this.handleKeypress);
+		this.selectors.$mobileNavButtons.on('click', this.handleButtons);
     this.selectors.$sliderThumbnail.on('click', this.handleThumbnails);
   }
 
   destroy() {
     $(document).off('wheel', this.scrollNav);
     $(document).off('keydown', this.handleKeypress);
-    this.selectors.$sliderThumbnail.off('click', '**');
-  }
+    this.selectors.$mobileNavButtons.off('click', this.handleButtons);
+    this.selectors.$sliderThumbnail.off('click', this.handleThumbnails);
+	}
+	
+	handleButtons(e) {
+    if ($('body').hasClass('is-animating')) {
+			return;
+		}
+		switch(e.target.id) {
+			case 'next':
+				if (this.index != this.maxSlideCount && this.scrollLock === false) {
+					this.slideNavNext();
+					this.scrollLock = true;
+				}
+				break;
+			case 'previous':
+				if (this.index != 1 && this.scrollLock === false) {
+					this.slideNavPrev();
+					this.scrollLock = true;
+				}
+				break;
+		}
+	}
 
   handleKeypress(e) {
-    switch(e.keyCode) {
-      case 39:
-        if (this.index != this.maxSlideCount && this.scrollLock === false) {
-          this.slideNavNext();
-          this.scrollLock = true;
-        }
-        break;
-      case 37: 
-        if (this.index != 1 && this.scrollLock === false) {
-          this.slideNavPrev();
-          this.scrollLock = true;
-        }
-        break;
-      case 13: 
-        console.log('Enter');
-        break;
+    if ($('body').hasClass('is-animating')) {
+			return;
     }
+
+		switch(e.keyCode) {
+			case 39:
+				if (this.index != this.maxSlideCount && this.scrollLock === false) {
+					this.slideNavNext();
+					this.scrollLock = true;
+				}
+				break;
+			case 37: 
+				if (this.index != 1 && this.scrollLock === false) {
+					this.slideNavPrev();
+					this.scrollLock = true;
+				}
+				break;
+		}
   }
 
   handleThumbnails(e) {
-    this.setDragItem(e.target);
+    if ($('body').hasClass('is-animating')) {
+			return;
+		}
+		this.setDragItem(e.target);
   }
   /**
    * [scrollNav description]
@@ -105,7 +131,7 @@ export default class Slider {
    */
   scrollNav(e) {
     // Checks to see if user can scroll...
-    if (this.scrollLock == false) {
+    if (this.scrollLock == false && !$('body').hasClass('is-animating')) {
       let delta;
       e = e.originalEvent;
       // Gets a positive or negative value from the wheel event to determine if the user scrolled up or down
@@ -144,25 +170,20 @@ export default class Slider {
     const inDetails = $(slideIn).find('.slide__copy');
 
     let tl = new TimelineMax();
-    this.index = parseInt(slideIn.attr('data-slide-index')) + 1;
-      // timeline
-      // changing y and x here will simply convert this to horizontal scroll
+		this.index = parseInt(slideIn.attr('data-slide-index')) + 1;
+		
+		// changing y and x here will simply convert this to horizontal scroll
     tl
       .call(this.setSlideNav, [], 0)
       .set(slideIn, {x: '20%', className: '+=active', attr: {'aria-hidden': false}})
       .set(slideOut, {className: '-=active', autoAlpha: 1, attr: {'aria-hidden': true}})
       .set(inDetails, {autoAlpha: 0})
-      .to(outTitle, 1.2, {top: '0%', ease:Power3.easeInOut}, 0)
-      .to(slideOut, 1.2, {x: '-20%', autoAlpha: 0, ease:Power3.easeInOut}, 0)
-      .to(slideIn, 1.5, {x: '-=20%', autoAlpha: 1, ease:Power3.easeInOut}, 0)
-      .to(inDetails, 1, {autoAlpha: 1}, 1.2)
+      .to(outTitle, .2, {top: '0%', ease:Power3.easeInOut}, 0)
+      .to(slideOut, .4, {x: '-20%', autoAlpha: 0, ease:Power3.easeInOut}, 0)
+      .to(slideIn, .7, {x: '-=20%', autoAlpha: 1, ease:Power3.easeInOut}, 0)
+      .to(inDetails, .7, {autoAlpha: 1}, .3)
       .set([outTitle, slideOut, inDetails], {clearProps: 'all'})
-      .call(this.resetScroll, [], this, 2);
-
-    // Checks to see if on last slide
-    // if (this.index === this.maxSlideCount) {
-    //   TweenMax.to(slideNavNext, 0.3, {autoAlpha: 0.2});
-    // }
+      .call(this.resetScroll, [], this, 1);
   }
 
   goToPrevSlide(slideOut, slideIn) {
@@ -173,33 +194,24 @@ export default class Slider {
     let tl = new TimelineMax();
     this.index = parseInt(slideIn.attr('data-slide-index')) + 1;
 
-      // timeline
-      // changing y and x here will simply convert this to horizontal scroll
-      tl
+		// changing y and x here will simply convert this to horizontal scroll
+		tl
       .call(this.setSlideNav, [], 0)
       .set(slideIn, {x: '-20%', className: '+=active', attr: {'aria-hidden': false}})
       .set(slideOut, {className: '-=active', attr: {'aria-hidden': true}})
       .set(inTitle, {top: '0%'})
       .set(inDetails, {autoAlpha: 0})
-      .to(inTitle, 1.2, {top: "50%"}, 0)
-      .to(outTitle, 1.2, {top: '70%'}, 0)
-      .to(slideOut, 1.2, {x: '+=20%', autoAlpha: 0, ease:Power3.easeInOut}, 0)
-      .to(slideIn, 1.5, {x: '+=20%', autoAlpha: 1, ease:Power3.easeInOut}, 0)
-      .to(inDetails, 1, {autoAlpha: 1}, 1.2)
+      .to(outTitle, .2, {top: '70%'}, 0)
+      .to(slideOut, .4, {x: '+=20%', autoAlpha: 0, ease:Power3.easeInOut}, 0)
+      .to(slideIn, .7, {x: '+=20%', autoAlpha: 1, ease:Power3.easeInOut}, 0)
+      .to(inDetails, .7, {autoAlpha: 1}, .3)
       .set([outTitle, slideOut, inDetails], {clearProps: 'all'})
-      .call(this.resetScroll, [], this, 2);
-
-    // Checks to see if on last slide
-    // if (this.index === 1) {
-    //   TweenMax.to(slideNavPrev, 0.3, {autoAlpha: 0.2});
-    //   TweenMax.to(slideNavNext, 0.3, {autoAlpha: 1});
-    // }
+      .call(this.resetScroll, [], this, 1);
   }
 
   setSlideNav() {
-    // $('.slider-nav__single').removeClass('active');
-    const currentActive = $('.slide.active').attr('data-slide-index');
     this.selectors.$sliderNav.find('.active').removeClass('active');
-    this.selectors.$sliderNav.find(`[data-slide-nav=${currentActive}]`).addClass('active');
+    this.selectors.$sliderNav.find(`[data-slide-nav=${this.index - 1}]`).addClass("active");
+    this.selectors.$mobileNavIndex.text(this.index);
   }
 }
