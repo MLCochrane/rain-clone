@@ -22,7 +22,7 @@ const modernizrConfig = {
 
 module.exports = {
   entry: {
-    app: './src/app.js'
+    app: ['@babel/polyfill', './src/app.js']
   },
   output: {
     filename: '[name].bundle.js',
