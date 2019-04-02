@@ -49,7 +49,7 @@ function pageTransiton(cur, next) {
 		let tl = new TimelineLite();
 		tl
 		.set(next, {autoAlpha: 0, y: -5}, 0)
-		.to(cur, 1, {autoAlpha: 0, y: -5}, 0)
-		.to(next, 2, { autoAlpha: 1, y: 0, onComplete: () => { resolve(); }}, 1);
+		.to(cur, .5, {autoAlpha: 0, y: -5}, 0)
+		.to(next, 1, { autoAlpha: 1, y: 0, onComplete: () => { resolve(); }}, 1);
 	});
 }
