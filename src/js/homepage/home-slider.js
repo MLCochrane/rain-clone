@@ -1,5 +1,5 @@
 import $ from 'jquery';
-import { TweenMax, TimelineLite, Power3 } from 'gsap';
+import { TimelineMax, Power3 } from 'gsap';
 
 /**
  * Slider class

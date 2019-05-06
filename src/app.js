@@ -1,6 +1,6 @@
 import './scss/app.scss';
 import barba from '@barba/core';
-import {TweenMax, TimelineLite} from 'gsap';
+import {TimelineLite} from 'gsap';
 
 import Slider from './js/homepage/home-slider.js';
 import header from './js/header.js';
@@ -15,16 +15,14 @@ barba.init({
 				// Initial load
 				header();
 
-				if (data.current.namespace === 'contact') {
-					return;
+				if (data.current.namespace === 'home') {
+					slider = new Slider(data.current.namespace);
 				}
-				slider = new Slider(data.current.namespace);
 			},
 			enter: data => {
-				if (data.current.namespace === 'contact') {
-					return;
+				if (data.current.namespace === 'home') {
+					slider = new Slider(data.next.namespace);
 				}
-				slider = new Slider(data.next.namespace);
 			},
 			leave: async ({ current, next }) => {
 				// Close drawer if open
