@@ -64,7 +64,7 @@ module.exports = {
     ]
   },
   plugins: [
-    new CleanWebpackPlugin(['dist/*.*'], {root: path.join(__dirname, '../')}),
+    new CleanWebpackPlugin(['dist/*'], {root: path.join(__dirname, '../')}),
     new HtmlWebpackPlugin({
       inject: {},
       template: "src/views/pages/index.hbs"
