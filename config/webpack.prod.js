@@ -1,40 +1,45 @@
 const merge = require('webpack-merge');
 const common = require('./webpack.common.js');
 
-const ExtractTextPlugin = require('extract-text-webpack-plugin');
+const MiniCssExtractPlugin = require('mini-css-extract-plugin');
+const TerserJSPlugin = require('terser-webpack-plugin');
+const OptimizeCSSAssetsPlugin = require('optimize-css-assets-webpack-plugin');
 
 module.exports = merge(common, {
   mode: 'production',
+  optimization: {
+    minimizer: [
+      new TerserJSPlugin({}),
+      new OptimizeCSSAssetsPlugin({})
+    ]
+  },
   module: {
     rules: [
       {
         test: /\.scss$/,
-        use: ExtractTextPlugin.extract({
-          fallback: 'style-loader',
-          use: [
-          {
-            loader: 'css-loader',
-            options: {
-              minimize: true
+        use: [
+        {
+          loader: MiniCssExtractPlugin.loader,
+        },
+        {
+          loader: 'css-loader'
+        },
+        {
+          loader: 'postcss-loader',
+          options: {
+            config: {
+              path: __dirname + '/config/postcss.config.js'
             }
           },
-          {
-            loader: 'postcss-loader',
-            options: {
-              config: {
-                path: __dirname + '/config/postcss.config.js'
-              }
-            },
-          },
-          {
-            loader: 'sass-loader'
-          }
-         ]
-        })
+        },
+        {
+          loader: 'sass-loader'
+        }
+        ]
       }
     ]
   },
   plugins: [
-    new ExtractTextPlugin('/css/style.css')
+    new MiniCssExtractPlugin('/css/style.css')
   ]
 })

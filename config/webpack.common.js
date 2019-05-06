@@ -1,25 +1,6 @@
 const path = require('path');
 const CleanWebpackPlugin = require('clean-webpack-plugin');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
-const ModernizerWebpackPlugin = require('modernizr-webpack-plugin');
-
-const modernizrConfig = {
-  minify: {
-    toplevel: true,
-    compress: {
-      loops: true
-    },
-    mangle: {},
-    output: {
-      comments: false
-    }
-  },
-  'feature-detects': [
-    'input',
-    'canvas',
-    'css/resize'
-  ]
-}
 
 module.exports = {
   entry: {
@@ -70,20 +51,9 @@ module.exports = {
       template: "src/views/pages/index.hbs"
     }),
     new HtmlWebpackPlugin({
-      filename: 'people/index.html', // specify filename or else will overwrite default index.html
+      filename: 'newpage/index.html', // specify filename or else will overwrite default index.html
       inject: {},
-      template: "src/views/pages/people.hbs"
+      template: "src/views/pages/newpage.hbs"
     }),
-    new HtmlWebpackPlugin({
-      filename: 'places/index.html', // specify filename or else will overwrite default index.html
-      inject: {},
-      template: "src/views/pages/places.hbs"
-    }),
-    new HtmlWebpackPlugin({
-      filename: 'things/index.html', // specify filename or else will overwrite default index.html
-      inject: {},
-      template: "src/views/pages/things.hbs"
-    }),
-    new ModernizerWebpackPlugin(modernizrConfig)
   ]
 }
