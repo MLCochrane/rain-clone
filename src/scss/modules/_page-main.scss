@@ -1,102 +1,126 @@
-.page-main {
-  position: absolute;
-  height: 100%;
-  width: 100%;
-  font-size: 70px;
-  padding: 1em;
-  overflow: hidden;
-  .slider-wrapper {
-    position: relative;
-    height: 100%;
-    width: 100%;
-  }
-  .slide {
-    position: absolute;
-    height: 100%;
-    width: 100%;
-    opacity: 0;
-    &__image {
-      @include media-query(700px) {
-        position: absolute;
-        transform: translate(-50%,-50%);
-        top: 50%;
-        left: 60%;
-      }
-      user-select: none;
-    }
-    &__content {
-      @include media-query(700px) {
-        position: absolute;
-        transform: translateY(-50%);
-        top: 50%;
-        left: 10%;
-      }
-      font-size: $--step-down-3;
-      max-width: 450px
-    }
-    &__title {
-      position: relative;
-      font-family: $secondaryFont;
-      font-weight: 900;
-      font-size: $--step-up-3;
-      text-transform: capitalize;
-      margin-bottom: .25em;
-    }
-    &__copy {
-      font-size: 16px;
-    }
-  }
-  .slider-nav {
-    position: absolute;
-    transform: translate(-50%,-50%);
-    top: 80%;
-    right: 50%;
-    cursor: grab;
-    user-select: none;
-    @include media-query(700px) {
-      top: 50%;
-      right: 5%;
-    }
-    &__single {
-      position: relative;
-      width: 3px;
-      height: 30px;
-      background: #f1f1f1;
-      transition: height 200ms, width 200ms;
-      pointer-events: none;
-      padding-bottom: 5px;
-      &.active {
-        background: black;
-      }
-      &.draggable-source--is-dragging {
-        background: blue;
-        display: inherit;
-      }
-      &.opened {
-        width: 30px;
-      }
-    }
-  }
-  .draggeable-standin {
-    position: absolute;
-    transform: translate(-50%,-50%);
-    top: 50%;
-    left: 50%;
-    width: 50px;
-    height: 100%;
-    user-select: none;
-  }
-  .drag-bar {
-    position: absolute;
-    top: 50%;
-    width: 70px;
-    height: 2px;
-    background-color: green;
-    opacity: 0;
-    display: none;
-    transform: translate3d(0%,-50%,0);
-  }
+[data-barba="container"] {
+	position: fixed;
+	height: 100%;
+	width: 100%;
 }
-.navigation-open {
-  cursor: grabbing;
+.slider {
+	position: absolute;
+	height: 100%;
+	width: 100%;
+	font-size: 70px;
+	padding: 80px 20px 20px;
+	overflow: hidden;
+	@include media-query($med) {
+		padding: 1em 1em 1em 100px;
+	}
+	.slider-wrapper {
+		position: relative;
+		height: 90%;
+		width: 100%;
+		@include media-query($med) {
+			height: 100%;
+		}
+	}
+	.slide {
+		position: absolute;
+		height: 100%;
+		width: 100%;
+		opacity: 0;
+		text-align: center;
+
+		&__image {
+			height: 80%;
+			position: relative;
+			user-select: none;
+			img {
+				max-height: 100%;
+				@include abs-center();
+			}
+		}
+		&__content {
+			height: 20%;
+			padding-top: .5em;
+			margin: 0 auto;
+			font-size: $--step-down-3;
+			@include media-query($med) {
+				padding-top: 1em;
+			}
+		}
+		&__title {
+			position: relative;
+			font-family: $secondaryFont;
+			font-weight: 900;
+			font-size: $--step-up-3;
+			text-transform: capitalize;
+			margin-bottom: .25em;
+			display: none;
+		}
+		&__copy {
+			font-size: 16px;
+		}
+	}
+	.slider-nav {
+		height: 10%;
+		user-select: none;
+		-webkit-backface-visibility: hidden;
+		@include media-query($med) {
+			position: absolute;
+			transform: translate(-50%,-50%);
+			left: 50%;  
+			height: auto;
+		}
+		&__thumbnail {
+			display: inline-block;
+			height: 50px;
+			width: 50px;
+			background-size: cover;
+			background-position: center;
+			background-repeat: no-repeat;
+			cursor: pointer;
+			transition: transform 200ms;
+			&:hover, &.active {
+				transform: scale(1.4);
+			}
+		}
+		&__desktop {
+			display: none;
+			@include media-query($med) {
+				display: inherit;
+			}
+		}
+		&__mobile {
+			text-align: center;
+			font-size: $--step-down-2;
+			div {
+				font-size: $--step-down-2;
+			}
+			@include media-query($med) {
+				display: none;
+			}
+		}
+		&__button {
+			cursor: pointer;
+			position: absolute;
+			bottom: 0%;
+			height: 20vh;
+			background: none;
+			border: none;
+			user-select: none;
+			&--prev {
+				left: 0;
+			}
+			&--next {
+				right: 0;
+			}
+			svg {
+				pointer-events: none;
+				path {
+					fill: none;
+					stroke: #000;
+					stroke-width: 2;
+					stroke-miterlimit: 10;
+				}
+			}
+		}
+	}
 }

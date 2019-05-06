@@ -5,12 +5,13 @@ const ModernizerWebpackPlugin = require('modernizr-webpack-plugin');
 
 const modernizrConfig = {
   minify: {
+    toplevel: true,
     compress: {
       loops: true
     },
     mangle: {},
     output: {
-      comments: true
+      comments: false
     }
   },
   'feature-detects': [
@@ -22,7 +23,7 @@ const modernizrConfig = {
 
 module.exports = {
   entry: {
-    app: './src/app.js'
+    app: ['@babel/polyfill', './src/app.js']
   },
   output: {
     filename: '[name].bundle.js',
@@ -63,25 +64,25 @@ module.exports = {
     ]
   },
   plugins: [
-    new CleanWebpackPlugin(['dist/*.*'], {root: path.join(__dirname, '../')}),
+    new CleanWebpackPlugin(['dist/*'], {root: path.join(__dirname, '../')}),
     new HtmlWebpackPlugin({
       inject: {},
       template: "src/views/pages/index.hbs"
     }),
     new HtmlWebpackPlugin({
-      filename: 'player/index.html', // specify filename or else will overwrite default index.html
+      filename: 'people/index.html', // specify filename or else will overwrite default index.html
       inject: {},
-      template: "src/views/pages/player.hbs"
+      template: "src/views/pages/people.hbs"
     }),
     new HtmlWebpackPlugin({
-      filename: 'newpage/index.html', // specify filename or else will overwrite default index.html
+      filename: 'places/index.html', // specify filename or else will overwrite default index.html
       inject: {},
-      template: "src/views/pages/newpage.hbs"
+      template: "src/views/pages/places.hbs"
     }),
     new HtmlWebpackPlugin({
-      filename: 'anothernewpage/index.html', // specify filename or else will overwrite default index.html
+      filename: 'things/index.html', // specify filename or else will overwrite default index.html
       inject: {},
-      template: "src/views/pages/anothernewpage.hbs"
+      template: "src/views/pages/things.hbs"
     }),
     new ModernizerWebpackPlugin(modernizrConfig)
   ]
