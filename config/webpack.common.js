@@ -1,28 +1,10 @@
 const path = require('path');
 const CleanWebpackPlugin = require('clean-webpack-plugin');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
-const ModernizerWebpackPlugin = require('modernizr-webpack-plugin');
-
-const modernizrConfig = {
-  minify: {
-    compress: {
-      loops: true
-    },
-    mangle: {},
-    output: {
-      comments: true
-    }
-  },
-  'feature-detects': [
-    'input',
-    'canvas',
-    'css/resize'
-  ]
-}
 
 module.exports = {
   entry: {
-    app: './src/app.js'
+    app: ['@babel/polyfill', './src/app.js']
   },
   output: {
     filename: '[name].bundle.js',
@@ -63,26 +45,15 @@ module.exports = {
     ]
   },
   plugins: [
-    new CleanWebpackPlugin(['dist/*.*'], {root: path.join(__dirname, '../')}),
+    new CleanWebpackPlugin(['dist/*'], {root: path.join(__dirname, '../')}),
     new HtmlWebpackPlugin({
       inject: {},
       template: "src/views/pages/index.hbs"
-    }),
-    new HtmlWebpackPlugin({
-      filename: 'player/index.html', // specify filename or else will overwrite default index.html
-      inject: {},
-      template: "src/views/pages/player.hbs"
     }),
     new HtmlWebpackPlugin({
       filename: 'newpage/index.html', // specify filename or else will overwrite default index.html
       inject: {},
       template: "src/views/pages/newpage.hbs"
     }),
-    new HtmlWebpackPlugin({
-      filename: 'anothernewpage/index.html', // specify filename or else will overwrite default index.html
-      inject: {},
-      template: "src/views/pages/anothernewpage.hbs"
-    }),
-    new ModernizerWebpackPlugin(modernizrConfig)
   ]
 }
