@@ -20,7 +20,7 @@ barba.init({
 				}
 			},
 			enter: data => {
-				if (data.current.namespace === 'home') {
+				if (data.next.namespace === 'home') {
 					slider = new Slider(data.next.namespace);
 				}
 			},
