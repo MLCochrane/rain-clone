@@ -1,6 +1,18 @@
 const path = require('path');
-const CleanWebpackPlugin = require('clean-webpack-plugin');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
+
+const paths = ['newpage'];
+const pages = paths.map(el => {
+  return new HtmlWebpackPlugin({
+    filename: `${el}/index.html`, // specify filename or else will overwrite default index.html
+    inject: {},
+    template: `src/views/pages/${el}.hbs`,
+    templateParameters: {
+      // Makes 'asset_path' an accesible variable in templates for appending file/image paths based on env
+      'asset_path': process.env.npm_lifecycle_event === 'dev' ? './src' : '',
+    }
+  })
+});
 
 module.exports = {
   entry: {
@@ -28,7 +40,7 @@ module.exports = {
               disable: true
             }
           }
-        ] 
+        ]
       },
       {
         test: /\.(hbs|handlebars)/,
@@ -45,15 +57,9 @@ module.exports = {
     ]
   },
   plugins: [
-    new CleanWebpackPlugin(['dist/*'], {root: path.join(__dirname, '../')}),
     new HtmlWebpackPlugin({
       inject: {},
       template: "src/views/pages/index.hbs"
     }),
-    new HtmlWebpackPlugin({
-      filename: 'newpage/index.html', // specify filename or else will overwrite default index.html
-      inject: {},
-      template: "src/views/pages/newpage.hbs"
-    }),
-  ]
+  ].concat(pages)
 }
