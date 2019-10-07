@@ -21,26 +21,49 @@ Running a development environment is done with:
 ```
 npm run dev
 ```
+
 ### Setting up pages
 
 Without any server-side logic and the handling of routes, [html-webpack-plugin](https://github.com/jantimon/html-webpack-plugin) is used for the creation of our HTML files.
 
-This will look something like: 
+There was a lot of repetition so this is currently being handled like so:
 
 ```javascript
-    new HtmlWebpackPlugin({
-      inject: {},
-      template: "src/views/pages/index.hbs"
-    }),
-    new HtmlWebpackPlugin({
-      filename: 'player/index.html', // specify filename or else will overwrite default index.html
-      inject: {},
-      template: "src/views/pages/player.hbs"
-    }),
+const paths = [
+	'scroll-loop',
+	'floating-text',
+	'wave-hover',
+	'cutout-slider',
+	'inverse-scroll'
+];
+const pages = paths.map(el => {
+	return new HtmlWebpackPlugin({
+		// eslint-disable-line no-new
+		filename: `${el}/index.html`, // specify filename or else will overwrite default index.html
+		inject: {},
+		template: `src/views/pages/${el}.hbs`,
+		templateParameters: {
+			asset_path: process.env.npm_lifecycle_event === 'dev' ? './src' : ''
+		}
+	});
+});
 ```
 
-* Adding a folder when setting the filename for new page templates ensures that the .html extension is not included in the url.
-* However, this will mean that when you run the build for production that the path will not be relative to that folder. You can manually update this in the output html files, although it is something I'd like to resolve in the near future.
+It should be noted that this requires the folder and file structure to follow a certain structure.
+
+This is then concatenated like so:
+
+```javascript
+  ...
+  plugins: [
+  new HtmlWebpackPlugin({
+    inject: {},
+    template: "src/views/pages/index.hbs"
+  })
+].concat(pages),
+```
+
+-   Adding a folder when setting the filename for new page templates ensures that the .html extension is not included in the url.
 
 ### Handling views
 
@@ -57,6 +80,7 @@ Adding a namespace attribute to your page templates like this:
 {{/layout/base}}
 
 ```
+
 Allows you to reference them in Barba lifecycle hooks like so:
 
 ```javascript
@@ -69,19 +93,19 @@ enter: data => {
 
 This allows for some more control over state and event binding/unbinding throughout your project.
 
-In this project there is currently a single page transition for all pages, however, Barba has support for custom rules which will dicate which transition to use. Additional transitions can be placed in the transitions array with their various rules. 
+In this project there is currently a single page transition for all pages, however, Barba has support for custom rules which will dicate which transition to use. Additional transitions can be placed in the transitions array with their various rules.
 
 ```javascript
 barba.init({
-	transitions: [
-		{
+  transitions: [
+    {
       name: 'default',
-      /* 
+      /*
       *  Other lifecycle hooks would be called here
       */
-			leave: async ({ current, next }) => {
-				await defaultPageTransiton(current.container, next.container);
-			}
+      leave: async ({ current, next }) => {
+        await defaultPageTransiton(current.container, next.container);
+      }
     },
     {
       name: 'custom',
@@ -92,18 +116,26 @@ barba.init({
         // where rule definitions for where you're going
       }
       leave: async ({ current, next }) => {
-				await customPageTransiton(current.container, next.container);
-			}
+        await customPageTransiton(current.container, next.container);
+      }
     }
-	]
+  ]
 });
 ```
 
 Please refer to the official Barba documentation linked above for more details.
 
+## Testing
+
+Project currently is currently using [Jest](https://jestjs.io/) and tests can be run with:
+
+```
+npm run test
+```
+
 ## Deployment
 
-Building the project files for production is done with: 
+Building the project files for production is done with:
 
 ```
 npm run build

@@ -2,37 +2,29 @@ import './scss/app.scss';
 import barba from '@barba/core';
 import {TimelineLite} from 'gsap';
 
-import Slider from './js/homepage/home-slider.js';
-import header from './js/header.js';
+import sample from './js/homepage/sample';
 
-let slider;
+let sampleModule = new sample(3);
 
 barba.init({
 	transitions: [
 		{
 			sync: true,
-			appear: data => {
+			appear: ({ current }) => {
 				// Initial load
-				header();
-
-				if (data.current.namespace === 'home') {
-					slider = new Slider(data.current.namespace);
+				if (current.namespace === 'home') {
+					console.log('Landed on Home');
+					console.log(sampleModule.getResult());
 				}
 			},
-			enter: data => {
-				if (data.next.namespace === 'home') {
-					slider = new Slider(data.next.namespace);
+			enter: ({ next }) => {
+				// Can use namespaces to initialize page specific things
+				if (next.namespace === 'home') {
+					console.log('Entering Home');
 				}
 			},
 			leave: async ({ current, next }) => {
-				// Close drawer if open
-				document.getElementById('MobileNav').classList.remove('active');
-
-				slider.destroy();
 				await pageTransiton(current.container, next.container);
-
-				// Removed after transition done allowing slider events to fire again
-				document.body.classList.replace('is-animating', 'not-animating');
 			}
 		}
 	]
@@ -40,11 +32,10 @@ barba.init({
 
 function pageTransiton(cur, next) {
 	return new Promise(resolve => {
-		// Used to ensure slider events not called between pages when the current Slider class is changing
-		document.body.classList.replace('not-animating', 'is-animating');
 
 		// Animation handles both current and next pages
 		let tl = new TimelineLite();
+
 		tl
 		.set(next, {autoAlpha: 0, y: -5}, 0)
 		.to(cur, .5, {autoAlpha: 0, y: -5}, 0)
