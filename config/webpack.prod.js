@@ -1,7 +1,8 @@
 const merge = require('webpack-merge');
 const common = require('./webpack.common.js');
+const webpack = require('webpack');
 
-const CleanWebpackPlugin = require('clean-webpack-plugin');
+const { CleanWebpackPlugin } = require('clean-webpack-plugin');
 const MiniCssExtractPlugin = require('mini-css-extract-plugin');
 const TerserJSPlugin = require('terser-webpack-plugin');
 const OptimizeCSSAssetsPlugin = require('optimize-css-assets-webpack-plugin');
@@ -12,7 +13,17 @@ module.exports = merge(common, {
     minimizer: [
       new TerserJSPlugin({}),
       new OptimizeCSSAssetsPlugin({})
-    ]
+    ],
+    runtimeChunk: 'single',
+    splitChunks: {
+      cacheGroups: {
+        vendor: {
+          test: /[\\/]node_modules[\\/]/,
+          name: 'vendors',
+          chunks: 'all'
+        }
+      }
+    }
   },
   module: {
     rules: [
@@ -41,10 +52,13 @@ module.exports = merge(common, {
     ]
   },
   plugins: [
-    new CleanWebpackPlugin(['dist/*'], {root: path.join(__dirname, '../')}),
+    new CleanWebpackPlugin({
+      cleanOnceBeforeBuildPatterns: ['**/*', '!/assets/*'],
+    }),
     new MiniCssExtractPlugin('/css/style.css'),
     new webpack.DefinePlugin({
       ASSET_PATH: JSON.stringify('')
-    })
+    }),
+    new webpack.HashedModuleIdsPlugin()
   ]
 })
