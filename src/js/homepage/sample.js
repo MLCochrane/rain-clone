@@ -8,6 +8,6 @@ export default function sample(num) {
   return {
     getResult() {
       return `The result is ${addEmUp()}`;
-    }
-  }
+    },
+  };
 }

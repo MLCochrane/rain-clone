@@ -1,6 +1,6 @@
 # Frontend Boiler
 
-Simple boilerplate for frontend projects allowing you to get up and running quick! Using handlebars, SCSS, an OOP javascript structure and webpack this lets you focus on creating and not worrying about setting up your environment.
+Simple boilerplate for frontend projects allowing you to get up and running quick! Using handlebars, SCSS, Typescript.
 
 ## Getting Started
 
@@ -26,27 +26,20 @@ npm run dev
 
 Without any server-side logic and the handling of routes, [html-webpack-plugin](https://github.com/jantimon/html-webpack-plugin) is used for the creation of our HTML files.
 
-There was a lot of repetition so this is currently being handled like so:
+Each folder in the `src/js/` directory will be used to make a page unless included in the overrides array.
 
 ```javascript
-const paths = [
-	'scroll-loop',
-	'floating-text',
-	'wave-hover',
-	'cutout-slider',
-	'inverse-scroll'
-];
-const pages = paths.map(el => {
-	return new HtmlWebpackPlugin({
-		// eslint-disable-line no-new
-		filename: `${el}/index.html`, // specify filename or else will overwrite default index.html
-		inject: {},
-		template: `src/views/pages/${el}.hbs`,
-		templateParameters: {
-			asset_path: process.env.npm_lifecycle_event === 'dev' ? './src' : ''
-		}
-	});
-});
+const overrides = ['utils', 'homepage', 'global'];
+const paths = fs.readdirSync(path.join(__dirname, '../', 'src/js')).filter((el) => overrides.indexOf(el) === -1);
+
+const pages = paths.map((el) => new HtmlWebpackPlugin({ // eslint-disable-line no-new
+  filename: `${el}/index.html`, // specify filename or else will overwrite default index.html
+  inject: {},
+  template: `src/views/pages/${el}.hbs`,
+  templateParameters: {
+    asset_path: process.env.npm_lifecycle_event === 'dev' ? './src' : '',
+  },
+}));
 ```
 
 It should be noted that this requires the folder and file structure to follow a certain structure.
@@ -99,24 +92,15 @@ In this project there is currently a single page transition for all pages, howev
 barba.init({
   transitions: [
     {
-      name: 'default',
-      /*
-      *  Other lifecycle hooks would be called here
-      */
-      leave: async ({ current, next }) => {
-        await defaultPageTransiton(current.container, next.container);
-      }
-    },
-    {
-      name: 'custom',
-      from:  {
-        // where rule definitions for where you are
+      sync: true,
+      once: ({ next }) => {
+        // Initial load
       },
-      to: {
-        // where rule definitions for where you're going
-      }
+      enter: ({next}) => {
+        // entering a page
+      },
       leave: async ({ current, next }) => {
-        await customPageTransiton(current.container, next.container);
+        // leaving a page
       }
     }
   ]
@@ -124,14 +108,6 @@ barba.init({
 ```
 
 Please refer to the official Barba documentation linked above for more details.
-
-## Testing
-
-Project currently is currently using [Jest](https://jestjs.io/) and tests can be run with:
-
-```
-npm run test
-```
 
 ## Deployment
 
@@ -145,15 +121,15 @@ This will create a dist folder with static assets that is ready to be uploaded t
 
 ## Built With
 
-* [handlebars](https://handlebarsjs.com/)
-* [webpack](https://webpack.js.org/)
-* [SCSS](https://sass-lang.com/)
-* [GSAP](https://greensock.com/gsap)
-* [Barba](http://barbajs.org/index.html)
+-   [handlebars](https://handlebarsjs.com/)
+-   [webpack](https://webpack.js.org/)
+-   [SCSS](https://sass-lang.com/)
+-   [GSAP](https://greensock.com/gsap)
+-   [Barba](https://barba.js.org/)
 
 ## Authors
 
-* **Luke Cochrane** [MLCochrane](https://github.com/MLCochrane/)
+-   **Luke Cochrane** [MLCochrane](https://github.com/MLCochrane/)
 
 ## License
 
